@@ -1,0 +1,96 @@
+#include <iostream>
+#include <vector>  
+using namespace std;
+
+void inputArray(int arr[], int n) {
+    cout << "Enter " << n << " numbers separated by spaces: ";
+    for(int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+}
+
+void outputArray(int arr[], int n) {
+    cout << "Array elements: ";
+    for(int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void merge(int arr[], int start, int mid, int end) {
+    vector<int> temp(end - start + 1);
+    int left = start, right = mid + 1, index = 0;
+
+    while (left <= mid && right <= end) {
+        if (arr[left] <= arr[right]) {
+            temp[index] = arr[left];
+            index++, left++;
+        } else {
+            temp[index] = arr[right];
+            index++, right++;
+        }
+    }
+
+    while (left <= mid) {
+        temp[index] = arr[left];
+        index++, left++;
+    }
+
+    while (right <= end) {  
+        temp[index] = arr[right];
+        index++, right++;
+    }
+
+    for (int i = 0; i < temp.size(); i++) {
+        arr[start + i] = temp[i];
+    }
+}
+
+void sortMerge(int arr[], int start, int end) {
+    if (start >= end)
+        return;
+
+    int mid = start + (end - start) / 2;
+    
+    // Sort the left half
+    sortMerge(arr, start, mid);
+    
+    // Sort the right half
+    sortMerge(arr, mid + 1, end);
+    
+    // Merge the two halves
+    merge(arr, start, mid, end);
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    
+    if (n <= 0) {
+        cout << "Invalid number of elements" << endl;
+        return 1;
+    }
+
+    int arr[n];
+    inputArray(arr, n);
+    
+    cout << "Before sorting: ";
+    outputArray(arr, n);
+
+    // Sorting the array using merge sort
+// Time Complexity:
+// Best: O(N log N)
+// Average: O(N log N)
+// Worst: O(N log N)
+
+// Space Complexity:
+// Worst: O(N)
+
+    sortMerge(arr, 0, n - 1);
+    
+    cout << "After sorting: ";
+    outputArray(arr, n);
+
+    return 0;
+}

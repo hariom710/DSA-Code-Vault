@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      border: 2px solid #007BFF;
+    }
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #007BFF;
+    }
+    .form-container label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    .form-container input, .form-container textarea, .form-container select, .form-container button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .form-container input, .form-container select, .form-container button {
+      background-color: #f8f9fa;
+    }
+    .form-container button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .form-container button:hover {
+      background-color: #0056b3;
+    }
+    .form-container .message {
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: center;
+      color: #28a745;
+    }
+    .form-container .message.error {
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Feedback Form</h1>
+    <form id="feedbackForm">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      
+      <label for="rating">Rating (1-5):</label>
+      <select id="rating" name="rating" required>
+        <option value="" disabled selected>Select a rating</option>
+        <option value="1">1 - Very Poor</option>
+        <option value="2">2 - Poor</option>
+        <option value="3">3 - Average</option>
+        <option value="4">4 - Good</option>
+        <option value="5">5 - Excellent</option>
+      </select>
+      
+      <label for="feedback">Your Feedback:</label>
+      <textarea id="feedback" name="feedback" rows="4" placeholder="Write your feedback here" required></textarea>
+      
+      <button type="button" onclick="submitFeedback()">Submit Feedback</button>
+    </form>
+    <p class="message" id="responseMessage"></p>
+  </div>
+
+  <script>
+    function submitFeedback() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const rating = document.getElementById('rating').value;
+      const feedback = document.getElementById('feedback').value;
+
+      // Simple validation
+      if (name && email && rating && feedback) {
+        document.getElementById('responseMessage').textContent = 
+          `Thank you, ${name}! Your feedback has been submitted successfully.`;
+        document.getElementById('responseMessage').classList.remove('error');
+        document.getElementById('responseMessage').classList.add('success');
+        
+        // Reset the form
+        document.getElementById('feedbackForm').reset();
+      } else {
+        document.getElementById('responseMessage').textContent = 
+          'Please fill out all the fields.';
+        document.getElementById('responseMessage').classList.remove('success');
+        document.getElementById('responseMessage').classList.add('error');
+      }
+    }
+  </script>
+</body>
+</html>

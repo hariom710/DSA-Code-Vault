@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    void shortest_distance(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        
+        // Initialize the matrix: Replace -1 with INF, and set diagonal elements to 0
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == -1) {
+                    matrix[i][j] = 1e9;  // Infinity
+                }
+                if (i == j) {
+                    matrix[i][j] = 0;  // Distance to self is 0
+                }
+            }
+        }
+
+        // Floyd-Warshall algorithm to find shortest paths
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+                }
+            }
+        }
+
+        // Replace infinity back with -1 for unreachable paths
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 1e9) {
+                    matrix[i][j] = -1;
+                }
+            }
+        }
+    }
+};
+
+int main() {
+    int V;
+    cout << "Enter the number of vertices: ";
+    cin >> V;  // Ensure this line is active to properly initialize V
+
+    vector<vector<int>> matrix(V, vector<int>(V));
+
+    cout << "Enter the adjacency matrix (-1 for no path):\n";
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            cin >> matrix[i][j];
+        }
+    }
+
+    Solution obj;
+    obj.shortest_distance(matrix);
+
+    cout << "The shortest distance matrix is:\n";
+    for (const auto& row : matrix) {
+        for (int cell : row) {
+            cout << cell << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+
+// Enter the number of vertices: 4
+// Enter the adjacency matrix (-1 for no path):
+// 0 3 -1 7
+// 8 0 2 -1
+// 5 -1 0 1
+// 2 -1 -1 0
+

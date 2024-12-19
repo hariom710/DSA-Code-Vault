@@ -1,0 +1,861 @@
+ 1. Write a program for insertion sort and display its time complexity for different 
+number of inputs.
+#include <iostream>
+#include <limits>
+using namespace std;
+
+void inputArray(int arr[], int n) {
+    cout << "Enter " << n << " numbers separated by spaces: ";
+    for(int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+}
+void outputArray(int arr[], int n) {
+    cout << "Array elements: ";
+    for(int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void sortSelection(int arr[], int n) {
+    for(int i = 0; i < n - 1; i++) {
+        int index = i;
+        for(int j = i + 1; j < n; j++) {
+            if(arr[j] < arr[index]) {
+                index = j;
+            }
+        }
+        swap(arr[i], arr[index]);
+    }
+    for(int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+}
+
+void sortSelectionReverse(int arr[], int n) {
+    for(int i = 0; i < n - 1; i++) {
+        int index = i;
+        for(int j = i + 1; j < n; j++) {
+            if(arr[j] > arr[index]) { // Changed condition here
+                index = j;
+            }
+        }
+        swap(arr[i], arr[index]);
+    }
+    for(int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+}
+
+void sortInsertion(int arr[], int n) {
+    for(int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while(j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+    for(int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    if (n <= 0) {
+        cout << "Invalid n " << endl;
+        return 1; 
+    }
+    int arr[n];
+    inputArray(arr, n);
+    outputArray(arr, n);
+    
+    cout << "Array after ascending sort is: ";
+    sortSelection(arr, n);
+    cout << endl;
+    sortInsertion(arr, n);
+    cout << endl;
+    
+    cout << "Array after descending sort is: ";
+    sortSelectionReverse(arr, n);
+    
+    return 0;
+}
+----------------------------------------------------------------------------
+2. Write a program for heap sort and compare its time complexity with insertion sort for 
+different number of inputs.
+#include<iostream>
+using namespace std;
+
+void Heapify(int arr[], int index, int n) {
+    int largest = index;
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
+
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    if (largest != index) {
+        swap(arr[largest], arr[index]);
+        Heapify(arr, largest, n);
+    }
+}
+
+void printHeap(int arr[], int n) {
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    cout << endl;
+}
+
+void buildMaxHeap(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        Heapify(arr, i, n);
+    }
+}
+
+void sortHeap(int arr[], int n) {
+    for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]); 
+        Heapify(arr, 0, i); 
+    }
+}
+
+int main() {
+    int arr[] = {10, 3, 8, 9, 5, 13, 18, 14, 11, 70};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    buildMaxHeap(arr, n); 
+    sortHeap(arr, n);    
+
+    cout << "Sorted array: ";
+    printHeap(arr, n);   
+
+    return 0;
+}
+---------------------------------------------------------------------------
+3. Write a program for merge sort and display its time complexity for different number 
+of inputs.
+#include <iostream>
+#include <vector>  
+using namespace std;
+
+void inputArray(int arr[], int n) {
+    cout << "Enter " << n << " numbers separated by spaces: ";
+    for(int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+}
+
+void outputArray(int arr[], int n) {
+    cout << "Array elements: ";
+    for(int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void merge(int arr[], int start, int mid, int end) {
+    vector<int> temp(end - start + 1);
+    int left = start, right = mid + 1, index = 0;
+
+    while (left <= mid && right <= end) {
+        if (arr[left] <= arr[right]) {
+            temp[index] = arr[left];
+            index++, left++;
+        } else {
+            temp[index] = arr[right];
+            index++, right++;
+        }
+    }
+
+    while (left <= mid) {
+        temp[index] = arr[left];
+        index++, left++;
+    }
+
+    while (right <= end) {  
+        temp[index] = arr[right];
+        index++, right++;
+    }
+
+    for (int i = 0; i < temp.size(); i++) {
+        arr[start + i] = temp[i];
+    }
+}
+
+void sortMerge(int arr[], int start, int end) {
+    if (start >= end)
+        return;
+
+    int mid = start + (end - start) / 2;
+    
+    // Sort the left half
+    sortMerge(arr, start, mid);
+    
+    // Sort the right half
+    sortMerge(arr, mid + 1, end);
+    
+    // Merge the two halves
+    merge(arr, start, mid, end);
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    
+    if (n <= 0) {
+        cout << "Invalid number of elements" << endl;
+        return 1;
+    }
+
+    int arr[n];
+    inputArray(arr, n);
+    
+    cout << "Before sorting: ";
+    outputArray(arr, n);
+
+    // Sorting the array using merge sort
+// Time Complexity:
+// Best: O(N log N)
+// Average: O(N log N)
+// Worst: O(N log N)
+
+// Space Complexity:
+// Worst: O(N)
+
+    sortMerge(arr, 0, n - 1);
+    
+    cout << "After sorting: ";
+    outputArray(arr, n);
+
+    return 0;
+}
+-----------------------------------------------------------
+4. Write a program for quick sort and compare its time complexity with merge sort for 
+different number of inputs.
+#include <iostream>
+#include <limits>
+using namespace std;
+
+void inputArray(int arr[], int n) {
+    cout << "Enter " << n << " numbers separated by spaces: ";
+    for(int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+}
+
+void outputArray(int arr[], int n) {
+    cout << "Array elements: ";
+    for(int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int partition(int arr[], int start, int end) {
+    int pivot = arr[end];
+    int pos = start;
+    for (int i = start; i < end; i++) {
+        if (arr[i] <= pivot) {
+            swap(arr[i], arr[pos]);
+            pos++;
+        }
+    }
+    swap(arr[pos], arr[end]);
+    return pos;
+}
+
+void sortQuick(int arr[], int start, int end) {
+    if (start >= end)
+        return;
+
+    int pivot = partition(arr, start, end);
+    // left side
+    sortQuick(arr, start, pivot - 1);
+    // right side
+    sortQuick(arr, pivot + 1, end);
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    
+    if (n <= 0) {
+        cout << "Invalid number of elements" << endl;
+        return 1; 
+    }
+
+    int arr[n];
+    inputArray(arr, n);
+    
+    cout << "Before sorting: ";
+    outputArray(arr, n);
+
+    sortQuick(arr, 0, n - 1);
+    
+        // Time Complexity:
+        // Average: O(N log N)
+        // Worst: O(N²)
+
+        // Space Complexity:
+        // Average: O(log N)
+        // Worst: O(N) 
+    
+    cout << "After sorting: ";
+    outputArray(arr, n);
+    
+    return 0;
+}
+------------------------------------------------------------------------
+ 5. Write a program for fractional knapsack problem using greedy strategy and analyse its 
+time complexity for different number of inputs.
+#include <bits/stdc++.h>
+using namespace std;
+
+// Structure to store item value and weight
+struct Item {
+    int value;
+    int weight;
+};
+
+// Comparator function to sort items based on value-to-weight ratio
+bool comp(Item a, Item b) {
+    return a.value * b.weight > b.value * a.weight;
+}
+
+// Function to return the maximum value in fractional knapsack
+double fractionalKnapsack(int W, Item arr[], int n) {
+    // Sort items by value-to-weight ratio
+    sort(arr, arr + n, comp);
+
+    int curWeight = 0;       // Current weight in the knapsack
+    double finalValue = 0.0; // Resulting maximum value
+
+    // Iterate over all items
+    for (int i = 0; i < n; i++) {
+        if (curWeight + arr[i].weight <= W) { // If the item can be fully included
+            curWeight += arr[i].weight;
+            finalValue += arr[i].value;
+        } else { // If the item can't be fully included
+            int remain = W - curWeight;
+            finalValue += (double)arr[i].value / (double)arr[i].weight * remain;
+            break;
+        }
+    }
+
+    return finalValue;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of items: ";
+    cin >> n;
+
+    // Array of items
+    Item arr[n];
+
+    // Taking input for value and weight of each item
+    cout << "Enter the value and weight of each item:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Item " << i + 1 << " - Value: ";
+        cin >> arr[i].value;
+        cout << "Item " << i + 1 << " - Weight: ";
+        cin >> arr[i].weight;
+    }
+
+    int weight;
+    cout << "Enter the capacity of the knapsack: ";
+    cin >> weight;
+
+    // Calculate maximum value
+    double ans = fractionalKnapsack(weight, arr, n);
+
+    // Output the result
+    cout << "The maximum value is " << fixed << setprecision(2) << ans << endl;
+
+    return 0;
+}
+
+// Enter the number of items: 3
+// Enter the value and weight of each item:
+// Item 1 - Value: 100
+// Item 1 - Weight: 20
+// Item 2 - Value: 60
+// Item 2 - Weight: 10
+// Item 3 - Value: 120
+// Item 3 - Weight: 30
+// Enter the capacity of the knapsack: 50
+
+-------------------------------------------------------------------------------------
+ 6. Write a program for job sequencing with deadline problem using greedy strategyand 
+analyse its time complexity for different number of inputs.
+#include <bits/stdc++.h>
+using namespace std;
+
+// A structure to represent a job 
+struct Job {
+    int id;     // Job Id 
+    int dead;   // Deadline of job 
+    int profit; // Profit if job is over before or on deadline 
+};
+
+class Solution {
+public:
+    // Comparison function to sort jobs by profit in descending order
+    static bool comparison(Job a, Job b) {
+        return (a.profit > b.profit);
+    }
+
+    // Function to find the maximum profit and the number of jobs done
+    pair<int, int> JobScheduling(Job arr[], int n) {
+        // Sort jobs in descending order of profit
+        sort(arr, arr + n, comparison);
+
+        // Find the maximum deadline among jobs
+        int maxi = arr[0].dead;
+        for (int i = 1; i < n; i++) {
+            maxi = max(maxi, arr[i].dead);
+        }
+
+        // Create a slot array to keep track of free time slots
+        vector<int> slot(maxi + 1, -1);
+
+        int countJobs = 0, jobProfit = 0;
+
+        // Iterate through all jobs
+        for (int i = 0; i < n; i++) {
+            // Find a free slot for this job (starting from its deadline)
+            for (int j = arr[i].dead; j > 0; j--) {
+                if (slot[j] == -1) { // If the slot is free
+                    slot[j] = i;     // Assign this job to the slot
+                    countJobs++;     // Increment job count
+                    jobProfit += arr[i].profit; // Add profit
+                    break;
+                }
+            }
+        }
+
+        // Return the total number of jobs done and the total profit
+        return make_pair(countJobs, jobProfit);
+    }
+};
+
+int main() {
+    int n;
+    cout<<"Input: N = 4, Jobs = {(1,4,20),(2,1,10),(3,1,40),(4,1,30)}"<<endl;
+    cout << "Enter the number of jobs: ";
+    cin >> n;
+
+    Job arr[n];
+    cout << "Enter job details (ID, Deadline, Profit) for each job:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Job " << i + 1 << ": ";
+        cin >> arr[i].id >> arr[i].dead >> arr[i].profit;
+    }
+
+    Solution ob;
+    // Function call to schedule jobs
+    pair<int, int> ans = ob.JobScheduling(arr, n);
+
+    // Output the result
+    cout << "Number of jobs done: " << ans.first << "\n";
+    cout << "Maximum profit: " << ans.second << "\n";
+
+    return 0;
+}
+
+// Input: N = 4, Jobs = {(1,4,20),(2,1,10),(3,1,40),(4,1,30)}
+// Enter the number of jobs: 4
+// Enter job details (ID, Deadline, Profit) for each job:
+// Job 1: 1 4 20
+// Job 2: 2 1 10
+// Job 3: 3 1 40
+// Job 4: 4 1 30
+--------------------------------------------------------------------------------------------
+ 7. Write a program for travelling salesman problem using dynamic programming and 
+analyse its time complexity for different number of inputs.
+#include <bits/stdc++.h>
+using namespace std;
+
+const int INF = 1e9;  // A large value representing infinity
+
+int tsp(int mask, int pos, vector<vector<int>>& dist, vector<vector<int>>& dp) {
+    int n = dist.size();
+
+    // Base Case: If all cities have been visited, return cost to return to the start
+    if (mask == (1 << n) - 1) {
+        return dist[pos][0];  // Cost to return to the starting city
+    }
+
+    // If this state has already been computed, return its value
+    if (dp[mask][pos] != -1) {
+        return dp[mask][pos];
+    }
+
+    // Initialize the result to infinity
+    int ans = INF;
+
+    // Try visiting all unvisited cities from the current city
+    for (int city = 0; city < n; city++) {
+        if ((mask & (1 << city)) == 0) {  // If the city has not been visited
+            int newAns = dist[pos][city] + tsp(mask | (1 << city), city, dist, dp);
+            ans = min(ans, newAns);
+        }
+    }
+
+    // Store and return the result
+    return dp[mask][pos] = ans;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of cities: ";
+    cin >> n;
+
+    // Initialize the distance matrix
+    vector<vector<int>> dist(n, vector<int>(n));
+    cout << "Enter the distance matrix:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> dist[i][j];
+        }
+    }
+
+    // DP table to store results of subproblems
+    vector<vector<int>> dp(1 << n, vector<int>(n, -1));
+
+    // Start the TSP from city 0 with only city 0 visited (mask = 1)
+    int result = tsp(1, 0, dist, dp);
+
+    cout << "Minimum cost: " << result << endl;
+
+    return 0;
+}
+
+// Enter the number of cities: 4
+// Enter the distance matrix:
+// 0 10 15 20
+// 10 0 35 25
+// 15 35 0 30
+// 20 25 30 0
+------------------------------------------------------------------------------
+ 8. Write a program for all pair shortest path using dynamic programming and analyse its 
+time complexity for different number of inputs.
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    void shortest_distance(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        
+        // Initialize the matrix: Replace -1 with INF, and set diagonal elements to 0
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == -1) {
+                    matrix[i][j] = 1e9;  // Infinity
+                }
+                if (i == j) {
+                    matrix[i][j] = 0;  // Distance to self is 0
+                }
+            }
+        }
+
+        // Floyd-Warshall algorithm to find shortest paths
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+                }
+            }
+        }
+
+        // Replace infinity back with -1 for unreachable paths
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 1e9) {
+                    matrix[i][j] = -1;
+                }
+            }
+        }
+    }
+};
+
+int main() {
+    int V;
+    cout << "Enter the number of vertices: ";
+    cin >> V;  // Ensure this line is active to properly initialize V
+
+    vector<vector<int>> matrix(V, vector<int>(V));
+
+    cout << "Enter the adjacency matrix (-1 for no path):\n";
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            cin >> matrix[i][j];
+        }
+    }
+
+    Solution obj;
+    obj.shortest_distance(matrix);
+
+    cout << "The shortest distance matrix is:\n";
+    for (const auto& row : matrix) {
+        for (int cell : row) {
+            cout << cell << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+
+// Enter the number of vertices: 4
+// Enter the adjacency matrix (-1 for no path):
+// 0 3 -1 7
+// 8 0 2 -1
+// 5 -1 0 1
+// 2 -1 -1 0
+
+
+------------------------------------------------------------------
+ 9. Write a program for 8 queen’s problem using backtracking
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    // Helper function to check if placing a queen at (row, col) is safe
+    bool isSafe1(int row, int col, vector<string>& board, int n) {
+        int dupRow = row, dupCol = col;
+
+        // Check upper-left diagonal
+        while (row >= 0 && col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            row--; col--;
+        }
+
+        // Reset row and col
+        row = dupRow; col = dupCol;
+
+        // Check left side
+        while (col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            col--;
+        }
+
+        // Reset row and col
+        row = dupRow; col = dupCol;
+
+        // Check lower-left diagonal
+        while (row < n && col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            row++; col--;
+        }
+
+        return true;
+    }
+
+    // Recursive function to find all possible arrangements of N-Queens
+    void solve(int col, vector<string>& board, vector<vector<string>>& ans, int n) {
+        if (col == n) {
+            ans.push_back(board);
+            return;
+        }
+
+        for (int row = 0; row < n; row++) {
+            if (isSafe1(row, col, board, n)) {
+                board[row][col] = 'Q';  // Place a queen
+                solve(col + 1, board, ans, n);  // Solve for the next column
+                board[row][col] = '.';  // Backtrack
+            }
+        }
+    }
+
+    // Main function to solve the N-Queens problem
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans;
+        vector<string> board(n, string(n, '.'));  // Initialize empty board
+        solve(0, board, ans, n);  // Start solving from column 0
+        return ans;
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter the size of the board (N): ";
+    cin >> n;  // Take input from user
+
+    Solution obj;
+    vector<vector<string>> ans = obj.solveNQueens(n);
+
+    if (ans.empty()) {
+        cout << "No solution exists for N = " << n << endl;
+    } else {
+        for (int i = 0; i < ans.size(); i++) {
+            cout << "Arrangement " << i + 1 << ":\n";
+            for (const string& row : ans[i]) {
+                cout << row << endl;
+            }
+            cout << endl;
+        }
+    }
+
+    return 0;
+}
+
+---------------------------------------------------------------------------------
+ 10. Write a program for graph coloring problem using backtracking
+#include <bits/stdc++.h>
+using namespace std;
+
+bool isSafe(int node, int color[], bool graph[101][101], int n, int col) {
+    for (int k = 0; k < n; k++) {
+        if (k != node && graph[k][node] == 1 && color[k] == col) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool solve(int node, int color[], int m, int N, bool graph[101][101]) {
+    if (node == N) {
+        return true;
+    }
+
+    for (int i = 1; i <= m; i++) {
+        if (isSafe(node, color, graph, N, i)) {
+            color[node] = i;
+            if (solve(node + 1, color, m, N, graph)) return true;
+            color[node] = 0;
+        }
+    }
+    return false;
+}
+
+bool graphColoring(bool graph[101][101], int m, int N) {
+    int color[N] = {0};
+    if (solve(0, color, m, N, graph)) return true;
+    return false;
+}
+
+int main() {
+    int N, m, E;  // N: vertices, m: colors, E: edges
+
+    cout << "Enter the number of vertices: ";
+    cin >> N; //n=4
+    cout << "Enter the number of colors: ";
+    cin >> m; //m=3
+    cout << "Enter the number of edges: ";
+    cin >> E; //E=5
+
+    bool graph[101][101];
+    memset(graph, false, sizeof graph);
+
+    cout << "Enter the edges (u v) where 0 <= u, v < N:\n";  //{(0,1)(1,2)(2,3)(3,0)(0,2)}
+    for (int i = 0; i < E; i++) {
+        int u, v;
+        cin >> u >> v;
+        graph[u][v] = 1;
+        graph[v][u] = 1;
+    }
+
+    cout << graphColoring(graph, m, N) << endl;
+
+    return 0;
+}
+
+// Enter the number of vertices: 4
+// Enter the number of colors: 3
+// Enter the number of edges: 5
+// Enter the edges (u v) where 0 <= u, v < N:
+// 0 1
+// 1 2
+// 2 3
+// 3 0
+// 0 2
+--------------------------------------------------------------
+11  ImplementDijkstra'salgorithmtofindtheshortestpathsfromasource
+ vertextoallothervertices
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+vector<int> dijkstraAlgo(int v, const vector<vector<int>>& adjMatrix, int S) {
+    vector<bool> Explored(v, false);
+    vector<int> dist(v, INT_MAX);
+    dist[S] = 0;
+    for (int count = v; count > 0; count--) {
+        int node = -1;
+        int value = INT_MAX;
+        for (int i = 0; i < v; i++) {
+            if (!Explored[i] && dist[i] < value) {
+                node = i;
+                value = dist[i];
+            }
+        }
+        if (node == -1) break; 
+
+        Explored[node] = true;       
+        for (int neighbour = 0; neighbour < v; neighbour++) {
+            int weight = adjMatrix[node][neighbour];  
+            if (weight != INT_MAX && !Explored[neighbour] && dist[node] + weight < dist[neighbour]) {
+                dist[neighbour] = dist[node] + weight;
+            }
+        }
+    }
+    return dist;
+}
+
+int main() {
+    int v;
+    cout << "Enter the number of vertices: ";
+    cin >> v;
+
+    vector<vector<int>> adjMatrix(v, vector<int>(v));
+    cout << "Enter the adjacency matrix (use a large value like 999999 for no connection):\n";
+    for (int i = 0; i < v; i++) {
+        for (int j = 0; j < v; j++) {
+            cin >> adjMatrix[i][j];
+            if (adjMatrix[i][j] == 999999) {
+                adjMatrix[i][j] = INT_MAX; // Replace 999999 with INT_MAX for no connection
+            }
+        }
+    }
+
+    int S;
+    cout << "Enter the source vertex: ";
+    cin >> S;
+
+    vector<int> distances = dijkstraAlgo(v, adjMatrix, S);
+    cout << "Shortest distances from vertex " << S << ":\n";
+    for (int i = 0; i < v; i++) {
+        if (distances[i] == INT_MAX) {
+            cout << "Vertex " << i << ": INF\n"; // Display INF for unreachable vertices
+        } else {
+            cout << "Vertex " << i << ": " << distances[i] << endl;
+        }
+    }
+
+    return 0;
+}
+
+// Enter the number of vertices: 5
+// Enter the adjacency matrix (use a large value like 999999 for no connection):
+// 0 9 6 5 3
+// 9 0 2 999999 999999
+// 6 2 0 4 999999
+// 5 999999 4 0 999999
+// 3 999999 999999 999999 0
+// Enter the source vertex: 0
+-----------------------------------------------------------
+12

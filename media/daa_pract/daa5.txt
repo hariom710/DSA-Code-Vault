@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Structure to store item value and weight
+struct Item {
+    int value;
+    int weight;
+};
+
+// Comparator function to sort items based on value-to-weight ratio
+bool comp(Item a, Item b) {
+    return a.value * b.weight > b.value * a.weight;
+}
+
+// Function to return the maximum value in fractional knapsack
+double fractionalKnapsack(int W, Item arr[], int n) {
+    // Sort items by value-to-weight ratio
+    sort(arr, arr + n, comp);
+
+    int curWeight = 0;       // Current weight in the knapsack
+    double finalValue = 0.0; // Resulting maximum value
+
+    // Iterate over all items
+    for (int i = 0; i < n; i++) {
+        if (curWeight + arr[i].weight <= W) { // If the item can be fully included
+            curWeight += arr[i].weight;
+            finalValue += arr[i].value;
+        } else { // If the item can't be fully included
+            int remain = W - curWeight;
+            finalValue += (double)arr[i].value / (double)arr[i].weight * remain;
+            break;
+        }
+    }
+
+    return finalValue;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of items: ";
+    cin >> n;
+
+    // Array of items
+    Item arr[n];
+
+    // Taking input for value and weight of each item
+    cout << "Enter the value and weight of each item:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Item " << i + 1 << " - Value: ";
+        cin >> arr[i].value;
+        cout << "Item " << i + 1 << " - Weight: ";
+        cin >> arr[i].weight;
+    }
+
+    int weight;
+    cout << "Enter the capacity of the knapsack: ";
+    cin >> weight;
+
+    // Calculate maximum value
+    double ans = fractionalKnapsack(weight, arr, n);
+
+    // Output the result
+    cout << "The maximum value is " << fixed << setprecision(2) << ans << endl;
+
+    return 0;
+}
+
+// Enter the number of items: 3
+// Enter the value and weight of each item:
+// Item 1 - Value: 100
+// Item 1 - Weight: 20
+// Item 2 - Value: 60
+// Item 2 - Weight: 10
+// Item 3 - Value: 120
+// Item 3 - Weight: 30
+// Enter the capacity of the knapsack: 50

@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+vector<int> dijkstraAlgo(int v, const vector<vector<int>>& adjMatrix, int S) {
+    vector<bool> Explored(v, false);
+    vector<int> dist(v, INT_MAX);
+    dist[S] = 0;
+    for (int count = v; count > 0; count--) {
+        int node = -1;
+        int value = INT_MAX;
+        for (int i = 0; i < v; i++) {
+            if (!Explored[i] && dist[i] < value) {
+                node = i;
+                value = dist[i];
+            }
+        }
+        if (node == -1) break; 
+
+        Explored[node] = true;       
+        for (int neighbour = 0; neighbour < v; neighbour++) {
+            int weight = adjMatrix[node][neighbour];  
+            if (weight != INT_MAX && !Explored[neighbour] && dist[node] + weight < dist[neighbour]) {
+                dist[neighbour] = dist[node] + weight;
+            }
+        }
+    }
+    return dist;
+}
+
+int main() {
+    int v;
+    cout << "Enter the number of vertices: ";
+    cin >> v;
+
+    vector<vector<int>> adjMatrix(v, vector<int>(v));
+    cout << "Enter the adjacency matrix (use a large value like 999999 for no connection):\n";
+    for (int i = 0; i < v; i++) {
+        for (int j = 0; j < v; j++) {
+            cin >> adjMatrix[i][j];
+            if (adjMatrix[i][j] == 999999) {
+                adjMatrix[i][j] = INT_MAX; // Replace 999999 with INT_MAX for no connection
+            }
+        }
+    }
+
+    int S;
+    cout << "Enter the source vertex: ";
+    cin >> S;
+
+    vector<int> distances = dijkstraAlgo(v, adjMatrix, S);
+    cout << "Shortest distances from vertex " << S << ":\n";
+    for (int i = 0; i < v; i++) {
+        if (distances[i] == INT_MAX) {
+            cout << "Vertex " << i << ": INF\n"; // Display INF for unreachable vertices
+        } else {
+            cout << "Vertex " << i << ": " << distances[i] << endl;
+        }
+    }
+
+    return 0;
+}
+
+// Enter the number of vertices: 5
+// Enter the adjacency matrix (use a large value like 999999 for no connection):
+// 0 9 6 5 3
+// 9 0 2 999999 999999
+// 6 2 0 4 999999
+// 5 999999 4 0 999999
+// 3 999999 999999 999999 0
+// Enter the source vertex: 0

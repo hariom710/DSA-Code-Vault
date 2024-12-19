@@ -1,0 +1,50 @@
+%option noyywrap
+%{
+#include<stdio.h>
+int c=0,s=0,w=0,l=0;
+%}
+%%
+[\n] { l++; w++;}
+[ \t] { s++;w++; }
+[a-zA-Z] { c++; }
+%%
+int main()
+{
+  yyin=fopen("p4.txt" ,"r");
+  yylex();
+  printf("\nLines =%d",l);
+  printf("\nSpace=%d",s);
+  printf("\nCharacter= %d",c);
+  printf("\nWord =%d",w);
+
+  return 0;
+}
+
+
+
+
+%{
+#include<stdio.h>
+int lines=1, spaces=0, tabs=0, chars=0, words=0;
+%}
+
+
+%%
+[\n] { lines++; chars+=yyleng;}
+[ \t] { spaces++; chars+=yyleng;}
+[^\t] { tabs++; chars+=yyleng;}
+[^\t\n ]+ { words++; chars+=yyleng;}
+%%
+
+int yywrap(){ return 1; }
+
+
+int main(){
+printf("Enter the Sentence : ");
+yylex();
+printf("Number of lines : %d\n",lines);
+printf("Number of spaces : %d\n",spaces);
+printf("Number of tabs, words, charc : %d , %d , %d\n",tabs, words, chars);
+
+return 0;
+}

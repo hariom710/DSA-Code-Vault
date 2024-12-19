@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Time Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    table {
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 600px;
+      background-color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    tr:hover {
+      background-color: #ddd;
+    }
+    caption {
+      margin: 10px 0;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <caption>Weekly Time Table</caption>
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>9:00 AM - 10:00 AM</th>
+        <th>10:00 AM - 11:00 AM</th>
+        <th>11:00 AM - 12:00 PM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Monday</td>
+        <td>Math</td>
+        <td>Science</td>
+        <td>English</td>
+      </tr>
+      <tr>
+        <td>Tuesday</td>
+        <td>Physics</td>
+        <td>Chemistry</td>
+        <td>History</td>
+      </tr>
+      <tr>
+        <td>Wednesday</td>
+        <td>Biology</td>
+        <td>Math</td>
+        <td>Geography</td>
+      </tr>
+      <tr>
+        <td>Thursday</td>
+        <td>Computer</td>
+        <td>English</td>
+        <td>Physics</td>
+      </tr>
+      <tr>
+        <td>Friday</td>
+        <td>History</td>
+        <td>Science</td>
+        <td>Biology</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

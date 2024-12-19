@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Exam Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 500px;
+    }
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-container label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-container input, .form-container select, .form-container button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background-color: #0056b3;
+    }
+    .form-container .message {
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: center;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Exam Registration Form</h1>
+    <form id="examForm">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      
+      <label for="roll">Roll Number:</label>
+      <input type="text" id="roll" name="roll" placeholder="Enter your roll number" required>
+      
+      <label for="exam">Select Exam:</label>
+      <select id="exam" name="exam" required>
+        <option value="" disabled selected>Select an exam</option>
+        <option value="math">Mathematics</option>
+        <option value="science">Science</option>
+        <option value="history">History</option>
+        <option value="english">English</option>
+      </select>
+      
+      <label for="dob">Date of Birth:</label>
+      <input type="date" id="dob" name="dob" required>
+      
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      
+      <button type="button" onclick="submitForm()">Register</button>
+    </form>
+    <p class="message" id="message"></p>
+  </div>
+
+  <script>
+    function submitForm() {
+      const name = document.getElementById('name').value;
+      const roll = document.getElementById('roll').value;
+      const exam = document.getElementById('exam').value;
+      
+      if (name && roll && exam) {
+        document.getElementById('message').textContent = 
+          `Thank you, ${name}! Your registration for the ${exam.toUpperCase()} exam is complete.`;
+      } else {
+        document.getElementById('message').textContent = 
+          'Please fill out all required fields.';
+      }
+    }
+  </script>
+</body>
+</html>

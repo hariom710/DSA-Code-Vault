@@ -1,0 +1,16 @@
+%option noyywrap
+%{
+#include<stdio.h>
+#include<stdlib.h>
+%}
+%%
+[ \t ]+ { printf(" "); }
+ \n  {  }
+. { putchar(yytext[0]); }
+%%
+
+int main()
+{
+yylex();
+return 0;
+}

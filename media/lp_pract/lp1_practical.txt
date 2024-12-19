@@ -1,0 +1,17 @@
+%option noyywrap
+
+%{
+#include<stdio.h>
+%}
+
+%%
+"hii"|"Hii"|"hi" { printf("Hello");}
+.* { printf("write only hii ");}
+%%
+
+int main()
+{
+printf("enter hi");
+yylex();
+return 0;
+}

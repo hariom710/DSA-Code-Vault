@@ -1,0 +1,19 @@
+%option noyywrap
+%{
+int h=0,s=0;
+#include<stdio.h>
+#include<stdlib.h>
+%}
+%%
+"he" { h++;  }
+"she" { s++;h++;  }
+.|\n ;
+%%
+
+int main()
+{
+yylex();
+printf("no of he is %d\n",h);
+printf("no of she is %d\n",s);
+return 0;
+}

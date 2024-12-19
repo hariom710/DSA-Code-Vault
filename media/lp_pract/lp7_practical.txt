@@ -1,0 +1,23 @@
+%option noyywrap
+%{
+#include <stdio.h>
+int flag = 0;  
+%}
+
+%%
+"("   { flag++; }    
+")"   { flag--; }    
+.|\n  ;              
+%%
+
+int main() {
+    printf("Enter a string to check for balanced parentheses:\n");
+    yylex();  
+
+    if (flag == 0) {
+        printf("Balanced\n");      } 
+    else {
+        printf("Not Balanced\n");      }
+
+    return 0;
+}

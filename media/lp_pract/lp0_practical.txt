@@ -1,0 +1,313 @@
+%option noyywrap
+
+%{
+#include<stdio.h>
+%}
+
+%%
+"hii"|"Hii"|"hi" { printf("Hello");}
+.* { printf("write only hii ");}
+%%
+
+int main()
+{
+printf("enter hi");
+yylex();
+return 0;
+}
+-----------------------------------------------------------------
+2. Write a Flex program to recognize identifiers, constants, keywords, etc.
+%option noyywrap
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+%}
+
+%%
+
+[0-9]+                      { printf("Entered word is a number.\n"); }
+(if|else|while|printf|scanf) { printf("Keyword: %s\n", yytext); }
+[a-zA-Z_]+[a-zA-Z0-9_]*      { printf("Identifier: %s\n", yytext); }
+[@#$%^&*]                    { printf("Entered word is a symbol: %s\n", yytext); }
+.                            { printf("Invalid character: %s\n", yytext); }
+
+%%
+
+int main() {
+    printf("Enter the word or code to be checked: ");
+    yylex();  // Start the lexical analysis
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
+-----------------------------------------------------------------
+3. Write a Flex program to check whether the entered word is VOWEL or NOT.
+%option noyywrap
+%{
+#include <stdio.h>
+#include <stdlib.h>
+%}
+
+%%
+^[aeiouAEIOU].*  printf("The entered word is vowel");
+.+               printf("The entered word is not vowel");
+%%
+
+int main()
+    {
+        printf("Entered the word to be checked:\n");
+        yylex();
+    }
+
+
+-------------------------------------------------------------------
+4. Write Flex program to count and print the Number of pages lines, words, and characters in a given file.
+%option noyywrap
+%{
+#include<stdio.h>
+int c=0,s=0,w=0,l=0;
+%}
+%%
+[\n] { l++; w++;}
+[ \t] { s++;w++; }
+[a-zA-Z] { c++; }
+%%
+int main()
+{
+  yyin=fopen("p4.txt" ,"r");
+  yylex();
+  printf("\nLines =%d",l);
+  printf("\nSpace=%d",s);
+  printf("\nCharacter= %d",c);
+  printf("\nWord =%d",w);
+
+  return 0;
+}
+-----------------------------------------------------------------
+5. Write a Flex program to recognize a valid arithmetic expression and to recognize the identifier and operators present and print them separately.
+%option noyywrap
+%{
+#include<stdio.h>
+int v=0,op=0,id=0,flag=0;
+%}
+%%
+[a-zA-Z]+[0-9A-Za-z]* { id++;}
+[0-9]+ { id++; }
+[\+\-\*/\=] { op++; }
+"(" {v++;}
+")" {v--;}
+";" { flag=1;}
+.|\n { return 0;}
+%%
+int main()
+{
+printf("enter the expression : \n");
+yylex();
+if((op+1)==id && v==0 && flag==0)
+{
+printf("expression is valid ");
+printf("\n no of identifiers : %d",id);
+printf("\n no of operater : %d\n",op);
+}
+else
+{
+printf(" expression is invalid : ");
+}
+return 0;
+}
+-------------------------------------------------------------------
+6. Write a Flex program to Count the number of IF conditions, printf and scanf statement in a program using the Lexical Analyzer.
+%{
+#include <stdio.h>
+int if_count = 0;
+int printf_count = 0;
+int scanf_count = 0;
+%}
+
+%%
+"if"                { if_count++; }
+"printf"            { printf_count++; }
+"scanf"             { scanf_count++; }
+[ \t\n]+            ;
+.                   ;
+
+%%
+int yywrap(){
+return 1;
+}
+int main() {
+    yylex();
+    printf("Number of 'if' conditions: %d\n", if_count);
+    printf("Number of 'printf' statements: %d\n", printf_count);
+    printf("Number of 'scanf' statements: %d\n", scanf_count);
+    return 0;
+}
+-------------------------------------------------------------------------------
+7. Write a Flex program to check whether the entered string of parenthesis is balanced or not in each input text file.
+%option noyywrap
+%{
+#include <stdio.h>
+int flag = 0;  
+%}
+
+%%
+"("   { flag++; }    
+")"   { flag--; }    
+.|\n  ;              
+%%
+
+int main() {
+    printf("Enter a string to check for balanced parentheses:\n");
+    yylex();  
+
+    if (flag == 0) {
+        printf("Balanced\n");      } 
+    else {
+        printf("Not Balanced\n");      }
+
+    return 0;
+}
+------------------------------------------------------------------------------
+8. Write lex program to extract all html tags in the given file.
+%option noyywrap
+%{
+#include<stdio.h>
+#include<stdlib.h>
+%}
+%%
+"<"[A-Za-z]+[0-9_]*">" { printf("%s",yytext);}
+"</"[A-Za-z]+[0-9_]*">" { printf("%s",yytext);}
+.*
+%%
+
+int main()
+{
+yylex();
+}
+-----------------------------------------------------------------------
+9 Write lex program to eliminate multiple spaces and tabs and replace with a single space and remove empty lines.
+%option noyywrap
+%{
+#include<stdio.h>
+#include<stdlib.h>
+%}
+%%
+[ \t ]+ { printf(" "); }
+ \n  {  }
+. { putchar(yytext[0]); }
+%%
+
+int main()
+{
+yylex();
+return 0;
+}
+---------------------------------------------------------------------------------
+10 Write lex program to count all instance of she and he, including the instances of he that are included in she.
+%option noyywrap
+%{
+int h=0,s=0;
+#include<stdio.h>
+#include<stdlib.h>
+%}
+%%
+"he" { h++;  }
+"she" { s++;h++;  }
+.|\n ;
+%%
+
+int main()
+{
+yylex();
+printf("no of he is %d\n",h);
+printf("no of she is %d\n",s);
+return 0;
+}
+-------------------------------------------------------------------------------
+11 To Study YACC. Write a YACC Program to display message “Have a good Day”.
+prog.l
+%option noyywrap
+%{
+#include"y.tab.h"  // which contains the definitions for the tokens generated by Bison.
+%}
+%%
+hello  { return HELLO ;}
+. { }  //  matches any single character (except newline) and does nothing (the empty action).
+\n { }
+
+%%
+
+
+prog.y
+%{
+#include<stdio.h>
+%}
+%token HELLO;  // declares a token
+%%
+begin:    //  begin rule is empty, allowing the parser to accept an empty input.
+        |msg
+        ;    
+msg:HELLO { printf("good day");}  //  msg rule matches the HELLO token and prints "good day" when the token is recognized.
+   ;
+%%
+
+void yyerror(char *s)   //This function is called by Bison when an error occurs during parsing. It takes a string s as input and prints it to standard error.
+{
+fprintf(stderr,"%s\n",s);
+return;
+}
+
+int main()
+{
+yyparse();  // begins the parsing process. AND it reads input and attempts to match it against the grammar defined in the Bison file.
+return 0;
+}
+
+---------------------------------------------------------------------
+12 Write a YACC program to recognize a valid arithmetic expression that uses operators +, -, * and /.
+%{
+#include <stdlib.h>
+void yyerror(char *);
+#include "y.tab.h"
+%}
+%%
+[0-9]+ {
+yylval=atoi(yytext);
+return INTEGER;
+}
+[-+\n] return *yytext;
+[ \t] ; /* skip whitespace */
+. yyerror("invalid character");
+%%
+int yywrap(void) {
+return 1;
+}
+%{
+#include <stdio.h>
+int yylex(void);
+void yyerror(char *);
+%}
+%token INTEGER
+%%
+program:
+program expr '\n' { printf("%d\n", $2); }
+|
+;
+expr:
+INTEGER { $$ = $1; }
+| expr '+' expr { $$ = $1 + $3; }
+| expr '-' expr { $$ = $1 - $3; }
+;
+%%
+void yyerror(char *s) {
+fprintf(stderr, "%s\n", s);
+}
+int main(void) {
+yyparse();
+return 0;
+}
+
+

@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    // Helper function to check if placing a queen at (row, col) is safe
+    bool isSafe1(int row, int col, vector<string>& board, int n) {
+        int dupRow = row, dupCol = col;
+
+        // Check upper-left diagonal
+        while (row >= 0 && col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            row--; col--;
+        }
+
+        // Reset row and col
+        row = dupRow; col = dupCol;
+
+        // Check left side
+        while (col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            col--;
+        }
+
+        // Reset row and col
+        row = dupRow; col = dupCol;
+
+        // Check lower-left diagonal
+        while (row < n && col >= 0) {
+            if (board[row][col] == 'Q') return false;
+            row++; col--;
+        }
+
+        return true;
+    }
+
+    // Recursive function to find all possible arrangements of N-Queens
+    void solve(int col, vector<string>& board, vector<vector<string>>& ans, int n) {
+        if (col == n) {
+            ans.push_back(board);
+            return;
+        }
+
+        for (int row = 0; row < n; row++) {
+            if (isSafe1(row, col, board, n)) {
+                board[row][col] = 'Q';  // Place a queen
+                solve(col + 1, board, ans, n);  // Solve for the next column
+                board[row][col] = '.';  // Backtrack
+            }
+        }
+    }
+
+    // Main function to solve the N-Queens problem
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans;
+        vector<string> board(n, string(n, '.'));  // Initialize empty board
+        solve(0, board, ans, n);  // Start solving from column 0
+        return ans;
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter the size of the board (N): ";
+    cin >> n;  // Take input from user
+
+    Solution obj;
+    vector<vector<string>> ans = obj.solveNQueens(n);
+
+    if (ans.empty()) {
+        cout << "No solution exists for N = " << n << endl;
+    } else {
+        for (int i = 0; i < ans.size(); i++) {
+            cout << "Arrangement " << i + 1 << ":\n";
+            for (const string& row : ans[i]) {
+                cout << row << endl;
+            }
+            cout << endl;
+        }
+    }
+
+    return 0;
+}

@@ -1,0 +1,18 @@
+%option noyywrap
+%{
+#include <stdio.h>
+#include <stdlib.h>
+%}
+
+%%
+^[aeiouAEIOU].*  printf("The entered word is vowel");
+.+               printf("The entered word is not vowel");
+%%
+
+int main()
+    {
+        printf("Entered the word to be checked:\n");
+        yylex();
+    }
+
+

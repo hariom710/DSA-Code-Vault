@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// A structure to represent a job 
+struct Job {
+    int id;     // Job Id 
+    int dead;   // Deadline of job 
+    int profit; // Profit if job is over before or on deadline 
+};
+
+class Solution {
+public:
+    // Comparison function to sort jobs by profit in descending order
+    static bool comparison(Job a, Job b) {
+        return (a.profit > b.profit);
+    }
+
+    // Function to find the maximum profit and the number of jobs done
+    pair<int, int> JobScheduling(Job arr[], int n) {
+        // Sort jobs in descending order of profit
+        sort(arr, arr + n, comparison);
+
+        // Find the maximum deadline among jobs
+        int maxi = arr[0].dead;
+        for (int i = 1; i < n; i++) {
+            maxi = max(maxi, arr[i].dead);
+        }
+
+        // Create a slot array to keep track of free time slots
+        vector<int> slot(maxi + 1, -1);
+
+        int countJobs = 0, jobProfit = 0;
+
+        // Iterate through all jobs
+        for (int i = 0; i < n; i++) {
+            // Find a free slot for this job (starting from its deadline)
+            for (int j = arr[i].dead; j > 0; j--) {
+                if (slot[j] == -1) { // If the slot is free
+                    slot[j] = i;     // Assign this job to the slot
+                    countJobs++;     // Increment job count
+                    jobProfit += arr[i].profit; // Add profit
+                    break;
+                }
+            }
+        }
+
+        // Return the total number of jobs done and the total profit
+        return make_pair(countJobs, jobProfit);
+    }
+};
+
+int main() {
+    int n;
+    cout<<"Input: N = 4, Jobs = {(1,4,20),(2,1,10),(3,1,40),(4,1,30)}"<<endl;
+    cout << "Enter the number of jobs: ";
+    cin >> n;
+
+    Job arr[n];
+    cout << "Enter job details (ID, Deadline, Profit) for each job:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Job " << i + 1 << ": ";
+        cin >> arr[i].id >> arr[i].dead >> arr[i].profit;
+    }
+
+    Solution ob;
+    // Function call to schedule jobs
+    pair<int, int> ans = ob.JobScheduling(arr, n);
+
+    // Output the result
+    cout << "Number of jobs done: " << ans.first << "\n";
+    cout << "Maximum profit: " << ans.second << "\n";
+
+    return 0;
+}
+
+// Input: N = 4, Jobs = {(1,4,20),(2,1,10),(3,1,40),(4,1,30)}
+// Enter the number of jobs: 4
+// Enter job details (ID, Deadline, Profit) for each job:
+// Job 1: 1 4 20
+// Job 2: 2 1 10
+// Job 3: 3 1 40
+// Job 4: 4 1 30
