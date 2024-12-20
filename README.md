@@ -1,4 +1,4 @@
-DSA Code Vault
+# DSA Code Vault
 Welcome to DSA Code Vault, a collection of commonly used algorithms and data structures. This repository serves as a reference for various DSA (Data Structures and Algorithms) problems. Whether you're preparing for interviews, improving your problem-solving skills, or just want to explore different algorithms, this repository provides organized and well-documented code for quick access and learning.
 
 Table of Contents
